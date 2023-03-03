@@ -1,0 +1,57 @@
+# Android
+# Build your Android project with Gradle.
+# Add steps that test, sign, and distribute the APK, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/android
+
+
+
+# Android
+# Build your Android project with Gradle.
+# Add steps that test, sign, and distribute the APK, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/android
+
+
+trigger:
+- main
+
+pool:
+  vmImage: 'macos-latest'
+
+name: $(date:yyyy).$(Month)$(rev:.r)
+
+steps:
+
+- script: npm install
+- script: echo "ndk.dir=$ANDROID_NDK_HOME" >> local.properties
+
+ 
+- task: Gradle@2
+  inputs:
+    gradleWrapperFile: 'android/gradlew'
+    workingDirectory: 'android'
+    options: '1.0'
+    tasks: 'assembleRelease'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    gradleOptions: '-Xmx3072m'
+    sonarQubeRunAnalysis: false
+
+- task: AndroidSigning@3
+  inputs:
+    apkFiles: '**/*.apk'
+    apksignerKeystoreFile: 'demo123.keystore'
+    apksignerKeystorePassword: '$(KeyStorePassword)'
+    apksignerKeystoreAlias: '$(KeyAlias)'
+    apksignerKeyPassword: '$(KeyPassword)'
+    zipalign: false
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    # PathtoPublish: 'android/app/build/outputs/apk/release'
+    PathtoPublish: 'android/app/build/outputs/'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+
+
+
