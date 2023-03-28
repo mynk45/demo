@@ -40,15 +40,15 @@ steps:
   inputs:
     apkFiles: '**/*.apk'
     apksignerKeystoreFile: 'demo123.keystore'
-    apksignerKeystorePassword: '$(KeyStorePassword)'
-    apksignerKeystoreAlias: '$(KeyAlias)'
-    apksignerKeyPassword: '$(KeyPassword)'
+    apksignerKeystorePassword: 'demo123'
+    apksignerKeystoreAlias: 'demo123'
+    apksignerKeyPassword: 'demo123'
     zipalign: false
 
 - task: PublishBuildArtifacts@1
   inputs:
     # PathtoPublish: 'android/app/build/outputs/apk/release'
-    PathtoPublish: 'android/app/build/outputs/'
+    PathtoPublish: 'android/app/build/outputs/apk/release'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
